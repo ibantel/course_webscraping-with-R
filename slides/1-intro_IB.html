@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Collecting web data with R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content=" Ivo Bantel      University of Zurich   Centre for Comparative &amp; International Studies                   " />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Collecting web data with R
+## An introduction
+### <big> Ivo Bantel <br> <br> <small> University of Zurich <br> Centre for Comparative &amp; International Studies <br> <br> <a href='https://www.ipz.uzh.ch/en/institut/mitarbeitende/staff/ibantel.html'> <i class='fas fa-home' style='font-size:.9em;' ></i> </a>  <a href='mailto:bantel@ipz.uzh.ch'> <i class='fas fa-envelope' style='font-size: .9em;'></i> </a>  <a href='https://twitter.com/ivobantel'> <i class='fab fa-twitter' style='font-size: .9em;'></i> </a> <br> <br>
+### March 5, 2021 — 16:30-17:45
+
+---
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+  &lt;span style="text-align:center"&gt;
+    &lt;span&gt;
+      &lt;img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/Cc-by-nc-sa_euro_icon.svg" height=14 style="vertical-align: middle"/&gt;
+    &lt;/span&gt;
+      &lt;span style="padding-left:82px"&gt;
+        &lt;font color="#7E7E7E"&gt;Ivo Bantel (UZH / CIS)&lt;/font&gt;
+      &lt;/span&gt;
+      &lt;font color="#7E7E7E"&gt;
+        Collecting web data with R | March 5, 2021 | &lt;a href = "https://github.com/ibantel/2021-03-05_CEU_Webscraping-with-R"&gt;GitHub&lt;/a&gt;
+      &lt;/font&gt;
+    &lt;/span&gt;
+  &lt;/div&gt; 
+
+---
+
+&lt;br&gt; &lt;br&gt; &lt;br&gt;&lt;br&gt; &lt;br&gt;
+
+#While you wait...
+
+...please ensure you installed the necessary packages
+
+&lt;br&gt;
+.pull-right95[
+
+```r
+install.packages(c("rvest", "dplyr", "stringr","knitr","rmarkdown"))
+```
+]
+
+???
+
+USe this slide as screen saver; then go back one.
+
+---
+
+
+
+
+
+
+
+# Welcome &amp; overview
+
+## Plan of the course
+
+&lt;!--- - if you have not, **install packages!!!** ---&gt;
+.pull-left55[
+&lt;ul&gt;
+  &lt;li class="m1"&gt;Introduction:&lt;/li&gt;&lt;br&gt;
+  &lt;ul class="level"&gt;
+    &lt;li&gt;&lt;span&gt;scraping &amp; HTML&lt;/span&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;span&gt;why you should (not) scrape&lt;/span&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;span&gt;legal and ethical questions&lt;/span&gt;&lt;/li&gt;
+  &lt;/ul&gt;&lt;br&gt;&lt;br&gt;
+
+  &lt;li class="m2"&gt;Hands-on&lt;/li&gt;
+  &lt;ul class="level"&gt;
+    &lt;li&gt;&lt;span&gt;scraping tables&lt;/span&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;span&gt;extraction using CSS selectors&lt;/span&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;span&gt;scaling up: scraping several pages &lt;!--- with loops and functions ---&gt;&lt;/span&gt;&lt;/li&gt;
+  &lt;/ul&gt;&lt;br&gt;&lt;br&gt;
+  
+  &lt;li class="m3"&gt;Outlook: overview of other techniques &lt;!--- (RSS, APIs, Selenium, social media data) ---&gt;&lt;/li&gt;
+  
+&lt;/ul&gt;
+
+&lt;!---  ADD TIME VISUALIZATION ---&gt;
+]
+
+.pull-right35[
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+&lt;mono&gt;install.packages(...)&lt;/mono&gt;
+
+]
+
+???
+
+Give overview of course
+
+Please turn on cameras :)
+
+**TO DO**: allocate times
+
+---
+
+# Introduction (1)
+
+.pull-left55[
+
+## About me: Ivo Bantel
+&lt;br&gt;&lt;br&gt;
+&lt;ul&gt;
+  &lt;li class="m1"&gt;PhD student (UZH, Digital Democracy Lab)&lt;/li&gt;&lt;br&gt;
+  &lt;li class="m2"&gt;_research interests_:&lt;/li&gt;
+    &amp;#8239; &amp;#8239; &amp;#8239; &amp;#8239; polarization, extreme right politics, political violence&lt;br&gt;&lt;br&gt;
+  &lt;!--- &lt;li class="m2"&gt;_teaching_: webscraping, qualitative methods, substantive courses&lt;/li&gt;&lt;br&gt;---&gt;
+  &lt;li class="m2"&gt;_contact_:&lt;/li&gt;
+  &amp;#8239; &amp;#8239; &amp;#8239; &amp;#8239;
+  &lt;i class='fas fa-envelope' style='font-size:.9em;' &gt;&lt;/i&gt; &amp;#8239; &amp;#8239; &amp;#8239; [bantel@ipz.uzh.ch](mailto:bantel@ipz.uzh.ch)
+  &lt;br&gt; &amp;#8239; &amp;#8239; &amp;#8239; &amp;#8239;
+  &lt;i class='fab fa-twitter' style='font-size: .9em;'&gt;&lt;/i&gt; &amp;#8239; &amp;#8239; &amp;#8239; [@ivobantel](https://twitter.com/ivobantel) 
+  &lt;br&gt;
+&lt;ul&gt;
+]
+
+.pull-right25[
+&lt;a href='https://www.ipz.uzh.ch/en'&gt;&lt;img src="./img/uzh.png" alt="UZH logo" height='200'&gt; &lt;br&gt;
+&lt;a href='https://www.ipz.uzh.ch/en'&gt;&lt;img src="./img/digdemlab.png" alt="DigDemLab logo" height='100'&gt;
+
+]
+
+???
+I will introduce myself quickly
+
+Due to the limited time, we won't be able to go around for everyone to introduce themselves unfortunately. So I will have to get to know you quantitatively - sorry for that! If you want to stick around for a drink later on, I'd be happy to chat for a bit.
+
+But for now, I have some questions. Please use *Yes*, *No* etc. in Zoom.
+---
+
+# Introduction (2)
+
+## Getting to know you
+
+- How much experience do you have in R? &lt;br&gt; 
+  &amp;nbsp; &lt;img src="./img/open-mouth.png" alt="open mouth" height="20"/&gt; &amp;nbsp; None &amp;nbsp;  &amp;nbsp;  &amp;nbsp;
+  &amp;nbsp; &lt;img src="./img/no.png" alt="no" height="20"/&gt; &amp;nbsp; Some  &amp;nbsp;  &amp;nbsp;  &amp;nbsp;
+  &amp;nbsp; &lt;img src="./img/yes.png" alt="yes" height="20"/&gt; &amp;nbsp; I can write functions &amp;nbsp;  &amp;nbsp;  &amp;nbsp;
+  &amp;nbsp; &lt;img src="./img/heart.png" alt="heart" height="20"/&gt; &amp;nbsp; I'm a pro
+
+--
+ 
+
+&lt;br&gt;
+
+- Have you ever webscraped? &lt;br&gt;
+  &amp;nbsp; &lt;img src="./img/open-mouth.png" alt="open mouth" height="20"/&gt; &amp;nbsp; What _is_ that? &amp;nbsp; &amp;nbsp;
+  &amp;nbsp; &lt;img src="./img/no.png" alt="no" height="20"/&gt;                 &amp;nbsp; Never           &amp;nbsp; &amp;nbsp;
+  &amp;nbsp; &lt;img src="./img/yes.png" alt="yes" height="20"/&gt;               &amp;nbsp; Once            &amp;nbsp; &amp;nbsp;
+  &amp;nbsp; &lt;img src="./img/heart.png" alt="heart" height="20"/&gt;           &amp;nbsp; I could teach it
+
+--
+ 
+
+&lt;br&gt;
+
+- How comfortable are you with HTML? &lt;br&gt;
+  &amp;nbsp; &lt;img src="./img/open-mouth.png" alt="open mouth" height="20"/&gt; &amp;nbsp; HTwhat? &amp;nbsp; &amp;nbsp; &amp;nbsp;
+  &amp;nbsp; &lt;img src="./img/no.png" alt="no" height="20"/&gt;                 &amp;nbsp; Heard of it    &amp;nbsp; &amp;nbsp;
+  &amp;nbsp; &lt;img src="./img/yes.png" alt="yes" height="20"/&gt;               &amp;nbsp; I know basics  &amp;nbsp; &amp;nbsp;
+  &amp;nbsp; &lt;img src="./img/heart.png" alt="heart" height="20"/&gt;           &amp;nbsp; I'm fluent
+
+
+
+&lt;br&gt;
+
+
+&lt;!--- - Is there a specific webpage you want to scrape? (Use chat) ---&gt;
+
+---
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

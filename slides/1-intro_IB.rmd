@@ -1,0 +1,202 @@
+---
+title: "Collecting web data with R"
+subtitle: "An introduction"
+author: "<big> Ivo Bantel <br> <br> <small> University of Zurich <br> Centre for Comparative & International Studies <br>
+  <br>
+  <a href='https://www.ipz.uzh.ch/en/institut/mitarbeitende/staff/ibantel.html'>
+    <i class='fas fa-home' style='font-size:.9em;' ></i>
+  </a>&#8239;
+  <a href='mailto:bantel@ipz.uzh.ch'>
+    <i class='fas fa-envelope' style='font-size: .9em;'></i>
+  </a>&#8239;
+  <a href='https://twitter.com/ivobantel'>
+    <i class='fab fa-twitter' style='font-size: .9em;'></i>
+  </a> <br> <br>"
+date: "March 5, 2021 &mdash; 16:30-17:45" # `r Sys.Date()`
+output:
+  xaringan::moon_reader:
+    css: ["default", "style.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+      
+---
+
+layout: true
+
+<div class="my-footer">
+  <span style="text-align:center">
+    <span>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/Cc-by-nc-sa_euro_icon.svg" height=14 style="vertical-align: middle"/>
+    </span>
+      <span style="padding-left:82px">
+        <font color="#7E7E7E">Ivo Bantel (UZH / CIS)</font>
+      </span>
+      <font color="#7E7E7E">
+        Collecting web data with R | March 5, 2021 | <a href = "https://github.com/ibantel/2021-03-05_CEU_Webscraping-with-R">GitHub</a>
+      </font>
+    </span>
+  </div> 
+
+---
+
+<br> <br> <br><br> <br>
+
+#While you wait...
+
+...please ensure you installed the necessary packages
+
+<br>
+.pull-right95[
+```{r, echo=T, eval=F}
+install.packages(c("rvest", "dplyr", "stringr","knitr","rmarkdown"))
+```
+]
+
+???
+
+USe this slide as screen saver; then go back one.
+
+---
+
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+# see: https://github.com/yihui/xaringan
+# install.packages("xaringan")
+# see: 
+# https://github.com/yihui/xaringan/wiki
+# https://github.com/gnab/remark/wiki/Markdown
+options(width=110)
+options(digits = 4)
+```
+
+```{r setup (2), echo = FALSE ,message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(comment=NA, fig.width=6, fig.height=6, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, fig.align = 'center', dpi = 200)
+library(tidyverse)
+```
+
+
+# Welcome & overview
+
+## Plan of the course
+
+<!--- - if you have not, **install packages!!!** --->
+.pull-left55[
+<ul>
+  <li class="m1">Introduction:</li><br>
+  <ul class="level">
+    <li><span>scraping & HTML</span></li>
+    <li><span>why you should (not) scrape</span></li>
+    <li><span>legal and ethical questions</span></li>
+  </ul><br><br>
+
+  <li class="m2">Hands-on</li>
+  <ul class="level">
+    <li><span>scraping tables</span></li>
+    <li><span>extraction using CSS selectors</span></li>
+    <li><span>scaling up: scraping several pages <!--- with loops and functions ---></span></li>
+  </ul><br><br>
+  
+  <li class="m3">Outlook: overview of other techniques <!--- (RSS, APIs, Selenium, social media data) ---></li>
+  
+</ul>
+
+<!---  ADD TIME VISUALIZATION --->
+]
+
+.pull-right35[
+
+<br><br><br><br>
+<mono>install.packages(...)</mono>
+
+]
+
+???
+
+Give overview of course
+
+Please turn on cameras :)
+
+**TO DO**: allocate times
+
+---
+
+# Introduction (1)
+
+.pull-left55[
+
+## About me: Ivo Bantel
+<br><br>
+<ul>
+  <li class="m1">PhD student (UZH, Digital Democracy Lab)</li><br>
+  <li class="m2">_research interests_:</li>
+    &#8239; &#8239; &#8239; &#8239; polarization, extreme right politics, political violence<br><br>
+  <!--- <li class="m2">_teaching_: webscraping, qualitative methods, substantive courses</li><br>--->
+  <li class="m2">_contact_:</li>
+  &#8239; &#8239; &#8239; &#8239;
+  <i class='fas fa-envelope' style='font-size:.9em;' ></i> &#8239; &#8239; &#8239; [bantel@ipz.uzh.ch](mailto:bantel@ipz.uzh.ch)
+  <br> &#8239; &#8239; &#8239; &#8239;
+  <i class='fab fa-twitter' style='font-size: .9em;'></i> &#8239; &#8239; &#8239; [@ivobantel](https://twitter.com/ivobantel) 
+  <br>
+<ul>
+]
+
+.pull-right25[
+<a href='https://www.ipz.uzh.ch/en'><img src="./img/uzh.png" alt="UZH logo" height='200'> <br>
+<a href='https://www.ipz.uzh.ch/en'><img src="./img/digdemlab.png" alt="DigDemLab logo" height='100'>
+
+]
+
+???
+I will introduce myself quickly
+
+Due to the limited time, we won't be able to go around for everyone to introduce themselves unfortunately. So I will have to get to know you quantitatively - sorry for that! If you want to stick around for a drink later on, I'd be happy to chat for a bit.
+
+But for now, I have some questions. Please use *Yes*, *No* etc. in Zoom.
+---
+
+# Introduction (2)
+
+## Getting to know you
+
+- How much experience do you have in R? <br> 
+  &nbsp; <img src="./img/open-mouth.png" alt="open mouth" height="20"/> &nbsp; None &nbsp;  &nbsp;  &nbsp;
+  &nbsp; <img src="./img/no.png" alt="no" height="20"/> &nbsp; Some  &nbsp;  &nbsp;  &nbsp;
+  &nbsp; <img src="./img/yes.png" alt="yes" height="20"/> &nbsp; I can write functions &nbsp;  &nbsp;  &nbsp;
+  &nbsp; <img src="./img/heart.png" alt="heart" height="20"/> &nbsp; I'm a pro
+
+--
+ 
+
+<br>
+
+- Have you ever webscraped? <br>
+  &nbsp; <img src="./img/open-mouth.png" alt="open mouth" height="20"/> &nbsp; What _is_ that? &nbsp; &nbsp;
+  &nbsp; <img src="./img/no.png" alt="no" height="20"/>                 &nbsp; Never           &nbsp; &nbsp;
+  &nbsp; <img src="./img/yes.png" alt="yes" height="20"/>               &nbsp; Once            &nbsp; &nbsp;
+  &nbsp; <img src="./img/heart.png" alt="heart" height="20"/>           &nbsp; I could teach it
+
+--
+ 
+
+<br>
+
+- How comfortable are you with HTML? <br>
+  &nbsp; <img src="./img/open-mouth.png" alt="open mouth" height="20"/> &nbsp; HTwhat? &nbsp; &nbsp; &nbsp;
+  &nbsp; <img src="./img/no.png" alt="no" height="20"/>                 &nbsp; Heard of it    &nbsp; &nbsp;
+  &nbsp; <img src="./img/yes.png" alt="yes" height="20"/>               &nbsp; I know basics  &nbsp; &nbsp;
+  &nbsp; <img src="./img/heart.png" alt="heart" height="20"/>           &nbsp; I'm fluent
+
+
+
+<br>
+
+
+<!--- - Is there a specific webpage you want to scrape? (Use chat) --->
+
+---
+
