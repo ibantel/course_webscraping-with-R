@@ -32,16 +32,16 @@ layout: true
     <span>
       <img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/Cc-by-nc-sa_euro_icon.svg" height=14 style="vertical-align: middle"/>
     </span>
-      <span style="padding-left:82px">
-        <font color="#7E7E7E">Ivo Bantel (UZH / CIS)</font>
-      </span>
-      <font color="#7E7E7E">
-        Collecting web data with R | March 5, 2021 | <a href = "https://github.com/ibantel/2021-03-05_CEU_Webscraping-with-R">GitHub</a>
-      </font>
-    </span>
-  </div> 
+      <a href = "https://github.com/ibantel/2021-03-05_CEU_Webscraping-with-R">
+        <span style="padding-left:82px">
+          <font color="#7E7E7E">Ivo Bantel (UZH / CIS)</font>
+        </span>
+        <font color="#7E7E7E">Collecting web data with R | March 5, 2021</font>
+      </a>
+</div> 
 
----
+
+???p
 
 <br> <br> <br><br> <br>
 
@@ -58,7 +58,9 @@ install.packages(c("rvest", "dplyr", "stringr","knitr","rmarkdown"))
 
 ???
 
-USe this slide as screen saver; then go back one.
+Use this slide as screen saver; then go back one.
+
+
 
 ---
 
