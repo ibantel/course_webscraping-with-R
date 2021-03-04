@@ -1,0 +1,225 @@
+---
+title: "Collecting web data with R"
+subtitle: "Worksheet"
+author: Ivo Bantel
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: yes
+    toc_float: true
+    toc_collapsed: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, eval=T)
+```
+
+# Exercise 1
+
+To practice scraping static pages, we start by simply reading data from the internet R. Suppose we want to scrape a website of quotes ([http://quotes.toscrape.com/](http://quotes.toscrape.com). Let's just have a look at the webpage *using R*.
+
+Load the package we'll use for most scraping exercises - *rvest*.
+
+```{r loading rvest}
+library(rvest) # load rvest
+library(tidyverse)
+```
+
+Now, we want to read the page into R. Create a character vector `url_quotes` which contains the URL. Then, can check if this worked by calling the function `browseURL()` on `url_quotes`.
+
+```{r load url}
+url_quotes <- "http://quotes.toscrape.com" # load url to url_quotes
+#browseURL(url_quotes) # browse to url
+```
+
+We now start by parsing the webpage (i.e. reading it into `R`). For this, pass `url_quotes` to the function `read_html()` and save the result as `page_quotes`. We will work off of this object for the rest of Exercise 1.
+
+```{r parse page}
+page_quotes <- read_html(url_quotes) # read html
+```
+
+
+## Extracting elements
+
+`read_html()` gives us the entire document including the HTML commands. Since we're normally not interested in the formatting, use `html_text()` to extract only the Webpage text.
+
+```{r extract text}
+page_quotes %>% html_text() # remove tags and formatting
+```
+
+Were you able to find the quotes? Let's at least clean this up a little bit. Pass the output you produced above to `str_squish()` from the `stringr` package to remove repeated white space.
+
+````{r clean extracted text}
+page_quotes %>% html_text() %>% stringr::str_squish() # remove repeated whitespace
+```
+
+That's better - but it still looks very messy. If only there were a way to tell R to just fetch the quotes' text! Lucky us: there is one! For this, we'll need the CSS Selectors we talked about earlier.
+
+## General CSS Selectors
+
+With `html_nodes()`, we can select specific elements of the HTML code (nodes). Familiarize yourself with the function by taking a look at the documentation of `html_nodes()`.
+
+```{r html_nodes() documentation}
+#?html_nodes # inspect documentation of html_nodes()
+```
+
+
+Selectors work on HTML tags - in other words, we can use selectors to select HTML tags: write the name of a tag (without the brackets, and the CSS selector will select all elements with that tag
+
+Let's first try to select some elements. First select **headings** from the page using `html_nodes()`, then try the same for **links**. (Use the selector Gadget if this helps.)
+
+```{r extract links and headings}
+page_quotes %>% html_nodes("h1") # extract headings, level 1
+page_quotes %>% html_nodes("a") # extract links
+```
+
+The **universal selector** (star symbol) is very helpful - it returns *all* tags in the page. Try it on `page_quotes`.
+
+```{r universal selector}
+page_quotes %>% html_nodes("*") # extract all tags
+```
+
+As we will focus on gathering specific information, the universal selector is not our first tool of choice but it can come very handy sometimes.
+
+For more complicated CSS selectors, we will use a tool that helps us determine the correct selectors: the [selector gadget](https://chrome.google.com/webstore/detail/selectorgadget/mhjhnkcfbdhnjickkkdbjoemdmbfginb). For a list of CSS Selectors, check out [this collection](https://www.w3schools.com/cssref/css_selectors.asp) - and if you want to practice CSS Selectors in a fun (and food-related) way, play with the [CSS Diner](https://flukeout.github.io) that helps you learn about different selector structures.
+
+
+## Applying specific CSS Selectors
+
+Let's now try to apply this in a more useful way to the quotes we scraped. Parse the page as we did before. Then use the CSS selector and `html_nodes()` to select only the _author_ elements (use the selector gadget to identify the relevant selector).
+
+``` {r extract authors}
+page_quotes %>% # parsed page
+  html_nodes(".author") # get author elements
+```
+
+Just selecting the nodes is helpful - but not quite what we want yet. Let's get just the *author names* by using `html_text()`:
+
+``` {r author names}
+page_quotes %>% # parsed page
+  html_nodes(".author") %>% # get author elements
+  html_text() # extract text
+```
+
+Now, do the same thing to get the quote texts.
+
+```{r clean author names}
+page_quotes %>% # parsed page
+  html_nodes(".quote") %>% # get quote elements
+  html_text() %>% # get text of quotes
+  stringr::str_squish() # string cleaning
+```
+
+# Exercise 2
+
+Exercise 2 contains less detailed instructions. If you're unsure about how to proceed, you can either revisit the steps in Exercise 1, look at hints (where available), use your favourite search engine, or consult with the people in your breakout room.
+
+## Warm-up: headings
+
+We now practice grabbing CSS Selectors and apply our skills to a more political science-related, real life site: select article headings from the [homepage of the guardian](https://www.theguardian.com).
+
+```{r select headings from theguardian.co.uk}
+url_guardian <- "https://www.theguardian.co.uk" # read in url
+page_guardian <- read_html(url_guardian) # parse page
+
+selected_nodes_guardian <- page_guardian %>% html_nodes("h3") # select nodes for article headings
+
+text <- selected_nodes_guardian %>% html_text() %>% # select html text
+  stringr::str_squish() # remove white space
+```
+
+## Categories
+
+Look at the selected nodes' text (with white space removed). Then try to extract the categories which the guardian assigns (the bold red text on the page), and print an overview table. If you get stuck, use the hints below. To achieve this, try the CSS Selector Gadget and, if you cannot get this to work, right-click on the element and click "Inspect element". Your browser's Developer Tools window will open, with the source code of the page. You can hover over elements in the source code to identify the elements you want to scrape.
+
+Look below the code block for hints.
+
+```{r select text of categories}
+categories <- page_guardian %>% # take page
+  html_nodes('.fc-item__kicker') %>% # select elements of <span class="fc-item__kicker">
+  html_text() %>% # select text only
+  table() # get overview of frequencies
+```
+
+
+**Hint**
+You're trying to get the elements of class `fc-item__kicker`. (Use `.fc-item__kicker`)
+
+<br>
+
+# Exercise 3
+
+Now, we will practice scraping tables. Out of the box, the `rvest` package is able to not only collect a table but also converts it into a list of data frames when we call `html_table()` on a page.
+
+The most important specification is the `fill` parameter: `html_table(fill=TRUE)` tells `rvest` to automatically fill rows with fewer than the maximum number of columns with NAs. This is crucial, since tables in real life are often messy. This means, the number of cells per row is inconsistent or the format is irregular in another way. The fill specificaion will deal with that by adding NA values. In practice, you will only use `fill=FALSE` (the default) if you're certain that the table is tidy.
+
+Try it out on the *Timeline* table in the [wikipedia article on women's suffrage](https://en.wikipedia.org/wiki/Women%27s_suffrage){target="_blank"}. Read the page and then apply the `html_table()` command with and without the specification.
+
+```{r parse tables, error=TRUE}
+tables <- read_html("https://en.wikipedia.org/wiki/Women%27s_suffrage") %>% html_table()
+tables_filled <- read_html("https://en.wikipedia.org/wiki/Women%27s_suffrage") %>% html_table(fill=T)
+```
+
+The resulting object will be a list of tables (`data.frame`s). To extract the table we're interested in (the "Timeline" table), we can use base notation (e.b. `[[1]]`) or, in a piping-chain, the command `extract2()` from the `magrittr` package, adding the number of the table in brackets (e.g. `extrac2(1)`; the command name is no typo - `extract` works for vectors, `extract2()` for lists).
+
+**Using both variants, extract the Timeline table from the list of tables that we scraped and inspect the table in a bit more detail.**
+
+
+```{r extract tables}
+tables_filled[[7]] # extract the Timeline table using bracket notation
+tables_filled %>% magrittr::extract2(7) # extract the Timeline table using magrittr::extract2() notation
+```
+
+
+As you can easily see, the table is too messy to use right away. In a real project, the task would now be to clean the table (e.g. using [`stringr`](https://evoldyn.gitlab.io/evomics-2018/ref-sheets/R_strings.pdf)). Gladly, we'll be able to skip this here. ;)
+
+Let's at least do some minor cleaning to have something to visualize. First, transform the table to a dataframe (or a tibble).
+
+``` {r table to data.frame or tibble}
+df <- tables_filled %>% magrittr::extract2(7) %>% data.frame() %>% tibble() # extract table and save as data.frame or as tibble
+```
+
+Then (using `dplyr::mutate()` and `readr::parse_number()`), introduce a new column `Year` containing the year women were first granted suffrage at the national level, and drop all columns except `Country` and `Year` (using `dplyr::select(-c())`).
+
+``` {r new column}
+df <- tables_filled %>% magrittr::extract2(7) %>% 
+  data.frame() %>% # take data frame/ tibble
+  dplyr::mutate(Year = readr::parse_number(Year.women.first.granted.suffrage.at.national.level, na = "No voting")) %>% # add column Year
+  dplyr::select(-c(Notes, Year.women.first.granted.suffrage.at.national.level, NA.)) # deselect columns
+```
+
+Now, inspect the data frame: what else would we need to clean?
+
+
+``` {r inspect data frame}
+df # inspect data frame
+```
+
+Let's remove the square brackets (and what they contain) as well as today's description of the country. (Hints below the code bloc.)
+
+```{r cleaning}
+df <- df %>% 
+  dplyr::mutate(Country = stringr::str_remove(Country, "\\[.*?\\]")) %>% # replace "[", "]", "(", and ")" with "" in the column "Country
+  dplyr::mutate(Country = stringr::str_remove(Country, "\\(.*?\\)")) %>%
+  dplyr::mutate(Country = stringr::str_remove(Country, " \\(Today: .*?\\)")) # remove all variations of "(Today: [any text here])"
+
+```
+
+**Hints**
+- Use the syntax `dplyr::mutate(Country = gsub("TO_BE_REPLACED", "", Country))`
+- For the regular expressions, use `"\\["` for the opening square bracket (equivalent for the regular brackets) and `".*?` for any number of characters in the brackets.
+
+
+Now, let's find out how the introduction of women's suffrage is distributed using a simple graph (create a simple table and call `plot()` on it), and which countries were first and last in the data set.
+
+``` {r extract information from data frame}
+
+df$Year %>% table() %>% plot() # plot
+
+df %>% dplyr::arrange(Year) %>% head(1) # select first country
+
+df %>% dplyr::arrange(desc(Year)) %>% head(1) # select last country
+
+```
+
+Congratulations! You have extracted, inspected, and even analyzed information without (overly) using the browser.

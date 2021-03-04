@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Collecting web data with R</title>
+    <title>Introduction to collecting web data with R</title>
     <meta charset="utf-8" />
     <meta name="author" content=" Ivo Bantel      University of Zurich   Centre for Comparative &amp; International Studies                   " />
     <script src="libs/header-attrs/header-attrs.js"></script>
@@ -12,10 +12,9 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# Collecting web data with R
-## An introduction
+# Introduction to collecting web data with R
 ### <big> Ivo Bantel <br> <br> <small> University of Zurich <br> Centre for Comparative &amp; International Studies <br> <br> <a href='https://www.ipz.uzh.ch/en/institut/mitarbeitende/staff/ibantel.html'> <i class='fas fa-home' style='font-size:.9em;' ></i> </a>  <a href='mailto:bantel@ipz.uzh.ch'> <i class='fas fa-envelope' style='font-size: .9em;'></i> </a>  <a href='https://twitter.com/ivobantel'> <i class='fab fa-twitter' style='font-size: .9em;'></i> </a> <br> <br>
-### March 5, 2021 — 16:30-17:45
+### March 5, 2021 (4:30-5:45)
 
 ---
 
@@ -35,86 +34,115 @@ layout: true
       &lt;/a&gt;
 &lt;/div&gt; 
 
+&lt;style&gt;
+p.large {
+    font-size: 15px;
+    background-color: tomato;
+}
+&lt;/style&gt;
+
+---
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+## While you wait...
+
+... please ensure you installed all necessary packages
+
+&lt;br&gt;
+.pull-right95[
+
+```r
+install.packages(c("rvest", "tidyverse", "knitr", "rmarkdown", "xml2"))
+```
+]
+
+???
+
+- Please make sure you have installed all packages
+- if you run into problems, please try restarting RStudio and trying again. 
+- If you still have problems, we'll have to figure that out prior to the first exercise
+
+
+- also, please turn on cameras :) 
+
 
 ---
 
 
 
 
+.pull-left6[
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
 
 
+## Goal
 
-# Welcome &amp; overview
 
-## Plan of the course
-
-&lt;!--- - if you have not, **install packages!!!** ---&gt;
-.pull-left55[
-&lt;ul&gt;
-  &lt;li class="m1"&gt;Introduction&lt;/li&gt;&lt;br&gt;
-  
-  &lt;li class="m1"&gt;Background scraping&lt;/li&gt;
-  &lt;ul class="level"&gt;
-    &lt;li&gt;&lt;span&gt;why you should (not) scrape&lt;/span&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;span&gt;varieties of scraping&lt;/span&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;span&gt;HTML&lt;/span&gt;&lt;/li&gt;
-  &lt;/ul&gt;&lt;br&gt;&lt;br&gt;
-
-  &lt;li class="m2"&gt;Hands-on&lt;/li&gt;
-  &lt;ul class="level"&gt;
-    &lt;li&gt;&lt;span&gt;scraping tables&lt;/span&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;span&gt;extraction using CSS selectors&lt;/span&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;span&gt;scaling up: scraping several pages &lt;!--- with loops and functions ---&gt;&lt;/span&gt;&lt;/li&gt;
-  &lt;/ul&gt;&lt;br&gt;&lt;br&gt;
-  
-  &lt;li class="m3"&gt;Outlook: overview of other techniques &lt;!--- (RSS, APIs, Selenium, social media data) ---&gt;&lt;/li&gt;
-  
-&lt;/ul&gt;
-
+&gt;### Introduce the fundamentals of web scraping, with hands-on experience!
 
 ]
 
-.pull-right35[
+.pull-right4[
 
 &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
-&lt;!---  ADD TIME VISUALIZATION | OR: package installations ---&gt;
+&lt;p align="center"&gt;&lt;img src="./img/target.png" height="350"&gt;&lt;/p&gt;
 
 ]
 
 ???
 
-- I will give overview of course
-
-- Please turn on cameras :)
-
-- We will have a hands-on section in the end -- you will be in smaller breakout rooms to help each other where you can
-
-
-**TO DO**: allocate times
+- In this short workshop, I'm trying to 
+- give you a first introduction to what web is,
+- how you can do it, and 
+- give you some hands-on experience
 
 ---
-class: inverse, center, middle
 
-# Introduction(s)
+&lt;br&gt;
+## Schedule 
+
+.pull-left[&lt;br&lt;br&gt;&lt;br&gt;&lt;img src="./img/agenda.jpg" height="300"&gt; &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;]
+
+&lt;ul&gt;
+    &lt;li style="font-size: 30px"&gt;Background scraping&lt;/li&gt;&lt;br&gt;
+    &lt;ul class="level"&gt;
+        &lt;li style="font-size: 22px"&gt;why you should (not) scrape&lt;/li&gt;&lt;br&gt;
+        &lt;li style="font-size: 22px"&gt;varieties of scraping&lt;/li&gt;&lt;br&gt;
+        &lt;li style="font-size: 22px"&gt;HTML&lt;/li&gt;&lt;br&gt;&lt;br&gt;
+    &lt;/ul&gt;
+    &lt;li style="font-size: 30px"&gt;Exercises web scraping&lt;/li&gt;&lt;br&gt;
+&lt;/ul&gt; 
 
 ???
 
-To get started I want to introduce myself and get to know your backgrounds a tiny little bit better
+- In the next hour or so,
+- I'll first introduce scraping and what to consider when doing it
+- then I'll talk on different varieties of scraping and
+- the basics of HTML and CSS selectors
+- We'll then take a little break and in the second part, we'll practise web scraping,
+    - we'll extract content from web pages using CSS selector and
+    - scrape tables
+- if we have time in the end, I'll also say a few words about scaling up and scraping several pages (e.g. with loops and functions)
+
+- for these exercises, you will be in smaller breakout rooms to help each other where you can
+
 
 ---
 
-# Introduction (1)
-
-.pull-left55[
-
+&lt;br&gt;
 ## About me: Ivo Bantel
+.pull-left65[
+
+
 &lt;br&gt;&lt;br&gt;
 &lt;ul&gt;
-  &lt;li class="m1"&gt;PhD student (UZH, Digital Democracy Lab)&lt;/li&gt;&lt;br&gt;
-  &lt;li class="m2"&gt;_research interests_:&lt;/li&gt;
-    &amp;#8239; &amp;#8239; &amp;#8239; &amp;#8239; polarization, extreme right politics, political violence&lt;br&gt;&lt;br&gt;
+  &lt;li class="m1" style="font-size: 25px"&gt;PhD student (UZH, Digital Democracy Lab)&lt;/li&gt;&lt;br&gt;&lt;br&gt;
+  &lt;li class="m2" style="font-size: 25px"&gt;_research interests_:&lt;/li&gt;
+    &amp;#8239; &amp;#8239; &amp;#8239; &amp;#8239; polarization, extreme right politics, political violence,&lt;br&gt;
+    &amp;#8239; &amp;#8239; &amp;#8239; &amp;#8239; web scraping, quantitative text analysis&lt;br&gt;&lt;br&gt;&lt;br&gt;
   &lt;!--- &lt;li class="m2"&gt;_teaching_: webscraping, qualitative methods, substantive courses&lt;/li&gt;&lt;br&gt;---&gt;
-  &lt;li class="m2"&gt;_contact_:&lt;/li&gt;
+  &lt;li class="m2" style="font-size: 25px"&gt;_Contact:_&lt;/li&gt;&lt;br&gt;
   &amp;#8239; &amp;#8239; &amp;#8239; &amp;#8239;
   &lt;i class='fas fa-envelope' style='font-size:.9em;' &gt;&lt;/i&gt; &amp;#8239; &amp;#8239; &amp;#8239; [bantel@ipz.uzh.ch](mailto:bantel@ipz.uzh.ch)
   &lt;br&gt; &amp;#8239; &amp;#8239; &amp;#8239; &amp;#8239;
@@ -132,25 +160,48 @@ To get started I want to introduce myself and get to know your backgrounds a tin
 ]
 
 ???
-I will introduce myself quickly
 
-Due to the limited time, we won't be able to go around for everyone to introduce themselves unfortunately. So I will have to get to know you quantitatively - sorry for that! If you want to stick around for a drink later on, I'd be happy to chat for a bit.
+- To get started I want to introduce myself and then get to know some things about you
+- I will introduce myself quickly. 
+- I'm doing my PhD at the University of Zurich, and I'm also part of the Digital Democracy Lab, which is a research hub focusing on the implications of digital technology for politics and democracy using computational social science methods
+- we also provide a research infrastructure that enables efficient, scalable, and replicable data collection and analysis for collaborators, so check that out if you're interested 
 
-But for now, I have some questions. Please use *Yes*, *No* etc. in Zoom.
+- my substantive research areas are polarization, extreme right politics, and terrorism (in that order) ;)
+- and methodologically, I'm interested in computational methods of data collection and analysis, like web scraping and quantitative text analysis
+
 ---
 
-# Introduction (2)
-
+&lt;br&gt;
 ## Getting to know you
 
-- How much experience do you have in R? &lt;br&gt; 
+???
+- Due to the limited time, we won't be able to go around for everyone to introduce themselves unfortunately. So I will have to get to know you quantitatively - sorry for that! If you want to stick around for a drink later on, I'd be happy to chat for a bit.
+But for now, I have some questions. Please use *Yes*, *No* etc. in Zoom.
+- To get to know you, I'll ask a few questions and ask you to use the reactions buttons
+- First question: "I have found the "open mouth" button".
+
+--
+
+&lt;br&gt;
+
+- How much experience do you have with R? &lt;br&gt; 
   &amp;nbsp; &lt;img src="./img/open-mouth.png" alt="open mouth" height="20"/&gt; &amp;nbsp; None &amp;nbsp;  &amp;nbsp;  &amp;nbsp;
   &amp;nbsp; &lt;img src="./img/no.png" alt="no" height="20"/&gt; &amp;nbsp; Some  &amp;nbsp;  &amp;nbsp;  &amp;nbsp;
   &amp;nbsp; &lt;img src="./img/yes.png" alt="yes" height="20"/&gt; &amp;nbsp; I can write functions &amp;nbsp;  &amp;nbsp;  &amp;nbsp;
   &amp;nbsp; &lt;img src="./img/heart.png" alt="heart" height="20"/&gt; &amp;nbsp; I'm a pro
 
+
 --
- 
+
+&lt;br&gt;
+
+- Have you used `RMarkdown` notebooks before? &lt;br&gt; 
+  &amp;nbsp; &lt;img src="./img/open-mouth.png" alt="open mouth" height="20"/&gt; &amp;nbsp; Don't know what that is &amp;nbsp;  &amp;nbsp;  &amp;nbsp;
+  &amp;nbsp; &lt;img src="./img/no.png" alt="no" height="20"/&gt; &amp;nbsp; I've opened one  &amp;nbsp;  &amp;nbsp;  &amp;nbsp;
+  &amp;nbsp; &lt;img src="./img/yes.png" alt="yes" height="20"/&gt; &amp;nbsp; I've written some &amp;nbsp;  &amp;nbsp;  &amp;nbsp;
+  &amp;nbsp; &lt;img src="./img/heart.png" alt="heart" height="20"/&gt; &amp;nbsp; All the time
+
+--
 
 &lt;br&gt;
 
@@ -174,66 +225,98 @@ But for now, I have some questions. Please use *Yes*, *No* etc. in Zoom.
 
 
 &lt;br&gt;
-
+ 
 
 &lt;!--- - Is there a specific webpage you want to scrape? (Use chat) ---&gt;
 
 ---
-class: inverse, center, middle
 
-# Background scraping
+class: inverse, center, middle
+## Background scraping
 
 
 ???
 
-let's get started with the content then
+- let's get started with the content then
 
-I will first give some background for everyone to understand how we can leverage `R` to automatically collect data from the web
+- I will first give some background for everyone to understand how we can leverage `R` to automatically collect data from the web
+
+- afterwards, we'll go through a few exercises
 
 ---
 
-# Scraping &amp;mdash; and why you...
+&lt;br&gt;
+## Scraping &amp;mdash; and why you...
 &lt;br&gt;
 
+???
+
+- I'll now quickly talk about the advantages of scraping -- and its dangers.
+- I won't be able to discuss this in detail but just want to make you aware of some considerations you should keep in mind
+
+- I assume that you all have some idea -- maybe too optimistic -- about why web scraping helps
+- but why should we scrape?
+
+--
+
 .pull-left45[
-### &amp;nbsp; &amp;nbsp; &amp;nbsp; ...should **not** do it
 
+### &amp;nbsp; &amp;nbsp; &amp;nbsp; ... should do it
 &lt;br&gt; 
-#### Legal, ethical, and logistical barriers
 
-- criminal code, copyright laws etc.
-- terms of service
-- ethical regulations (privacy, GDPR, informed consent)
-- measures to prevent scraping (API restrictions, 'distributed Turing test')
+**Data availability**: &lt;br&gt;
+&amp;nbsp; &amp;nbsp; &amp;nbsp; increasing amount of...
+- public data online ("open government")&lt;br&gt;&lt;br&gt;
+- politics happens online&lt;br&gt;&lt;br&gt;
+- people use the internet - and share everything online&lt;br&gt;&lt;br&gt;
+- data online makes real world phenomena more visible online 
+] 
 
-]
+
+???
+
+- In short, there are lots of data out there that is online that we can access (only or more easily with web scraping)
+- This includes data from government sources, politics that happens online -- political actors using online platforms to e.g. perform political actions; not just since the pandemic; but this also includes individuals sharing a lot online
+- in sum, all this data online makes real world phenomena more visible online
+
+- okay, now that we know what the benefits are, why should we **not** scrape?
+- as you might have thought from the list I just went through, there are also some drawbacks and limiting considerations
+- We can only touch upon the legal and ethical questions here
+- but i will highlight some points you need to be aware of
+
 
 --
 
 .pull-right45[
-### &amp;nbsp; &amp;nbsp; &amp;nbsp; ... should do it
+### &amp;nbsp; &amp;nbsp; &amp;nbsp; ...should _not_ do it
+
 &lt;br&gt; 
-#### Data availability
-- increasing amount of public data online ('open government')
-- increasing amount of politics happens online
-- increasing amount of people use the internet
-- we share everything online
-- that makes real world phenomena more visible online 
-]
+
+**Legal, ethical, and logistical barriers**
+
+- criminal code, copyright laws etc. &lt;br&gt; &amp;rarr; check `robots.txt`, use `polite` package&lt;br&gt;&lt;br&gt;
+- terms of service / measures to prevent scraping&lt;br&gt;&lt;br&gt; &lt;!--- (API restrictions, 'distributed Turing test') ---&gt;
+- ethical regulations and considerations &lt;!----(privacy, GDPR, informed consent)----&gt;
+
+] 
 
 ???
 
-We can only touch upon the legal and ethical questions here. But be aware that you need to take this into account!
+- the first thing to keep in mind is that you could actually break law when scraping; to prevent that, every page provides a file called robots.txt that tells you what you're not supposed to do on this site
+- similarly, some sites have measures in place to prevent you from scraping because it's against their terms of service
+- finally, ethical considerations: if you're scraping e.g. personal data, you need to be aware of privacy question and informed consent of your subjects!!! please take this seriously! web scraping is a powerful tool, use it wisely!
+
 
 ---
 
-# Scraping: what is out there?
+&lt;br&gt;
+## Scraping: what is out there?
 
 --
 
 .pull-left45[
 
-&lt;br&gt;&lt;b&gt;&lt;font size=6 color = "A0A0A0"&gt;1. Scraping static pages&lt;/font&gt;&lt;/b&gt;&lt;/li&gt;
+&lt;br&gt;&lt;b&gt;&lt;font size=6 color = "000000"&gt;1. Scraping static pages&lt;/font&gt;&lt;/b&gt;&lt;/li&gt;
 
 ]
 
@@ -270,13 +353,14 @@ Procedure
 
 ---
 
-# Scraping: what is out there? (2)
+&lt;br&gt;
+## Scraping: what is out there?
 
 
 .pull-left45[
 
 &lt;br&gt;&lt;b&gt;&lt;font size=6 color = "A0A0A0"&gt;1. Scraping static pages&lt;/font&gt;&lt;/b&gt;&lt;/li&gt;
-&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;font size=6 color = "A0A0A0"&gt;2. APIs &lt;font size=4&gt;(application programming interface)&lt;/font&gt;&lt;/font&gt;&lt;/li&gt;
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;font size=6 color = "000000"&gt;2. APIs &lt;font size=4&gt;(application programming interface)&lt;/font&gt;&lt;/font&gt;&lt;/li&gt;
 
 ]
 
@@ -288,8 +372,6 @@ Procedure
   &lt;font size=1&gt;Screenshot "DATA.GOV"&lt;/font&gt;
 
 ]
-
-
 
 ???
 
@@ -307,9 +389,11 @@ Procedure
 - pro: 1) legal and robust to changes in webpage structure; 2) highly standardized
 - con: 1) availability: not every page has API; 2) speed: rate limits / restrictions to amount of data; 3) may be terminated: ['post API age'](https://www.tandfonline.com/doi/full/10.1080/10584609.2018.1477506) 
 
+
 ---
 
-# Scraping: what is out there? (3)
+&lt;br&gt;
+## Scraping: what is out there?
 
 
 .pull-left45[
@@ -351,7 +435,8 @@ Procedure
 
 ---
 
-# Scraping: what is out there? (4)
+&lt;br&gt;
+## Scraping: what is out there?
 
 
 .pull-left45[
@@ -388,23 +473,27 @@ Procedure
   - con
     - masses of data (that are unclear)
 
----
-class: inverse, center, middle
+- **are there any questions?**
 
-# HTML
+---
+
+class: inverse, center, middle 
+## HTML
 
 
 ???
 
-the last thing we need to quickly talk about before we can get started is HTML
+before we can dive into the exercises, we need to get some understandingof HTML
 
 - refers to **H**yper **T**ext **M**arkup **L**anguage
   - *markup*: additional description of formatting beyond the content of the text
   
   - let's consider an example
+
 ---
 
-# HTML 101
+&lt;br&gt;
+## HTML 101: example
 
 &lt;br&gt; 
 
@@ -439,36 +528,71 @@ HTML turns this code ...
 
 ---
 
-# HTML 101
+&lt;br&gt;
+## HTML 101: components
+
+???
+
+- let's take a step back and look at some HTML
 
 --
 
-Components:
-
-&lt;br&gt;
-
-1. **HTML elements** (e.g. text)
-
-2. **HTML tags** 
-  - specify _character / behaviour_ of elements
-  - usually encompass starting and end tag (exceptions: images, line breaks etc.)
-  - surround the element they modify
-
-&lt;br&gt;
-
-Example: &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; `&lt;tagname&gt;Some content here...&lt;/tagname&gt; `
+.pull-right45[&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;img src="./img/boldtext.jpg" width="400"&gt;]
 
 
 ???
 
-let's take a step back
+- Let's look at some HTML text.
+- if we type this into a code editor and specify that this is a HTML document, the syntax highlighting will look similar to this
+- we can see here that there are two components: white text and colored text
 
-HTML consists of tags and content.
-we will focus on text because that's what we want to scrape (we could also scrape embedded images, e.g. for visual analysis etc.)
+--
+
+&lt;br&gt;
+
+.pull-left55[ &lt;br&gt;
+
+1. **HTML elements** (e.g. text, images)&lt;br&gt;&lt;br&gt;
+
+2. **HTML tags**&lt;br&gt;&lt;br&gt;
+
+  - specify elements' _character_ or _behaviour_&lt;br&gt;&lt;br&gt;
+
+  - usually start &amp; end tag &lt;br&gt; &amp;nbsp; (exceptions: images, line breaks, ...)&lt;br&gt;&lt;br&gt;
+
+  - surround the element they modify
+&lt;br&gt;
+
+]
+
+
+???
+
+- these are the two components of HTML: html elements and html tags
+
+- we want to scrape the text (we could also scrape embedded images, e.g. for visual analysis etc.)
+- but to _get_ the text, we need to access the parts we cant using the tags
+
+--
+
+&lt;br&gt;
+
+.pull-right45[&lt;br&gt;
+Example: &lt;br&gt;&lt;br&gt;
+
+&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; `&lt;tagname&gt;` &lt;br&gt;
+&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;nbsp;&amp;nbsp;  &amp;nbsp;  &amp;nbsp; `Some content here...` &lt;br&gt;
+&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; `&lt;/tagname&gt; `]
+
+???
+
+- To make a generic example, this would be something like this
+
 
 ---
 
-# HTML tags: basics
+&lt;br&gt;
+## HTML tags: basics
 
 .pull-right85[
 &lt;br&gt;&lt;br&gt;
@@ -486,6 +610,7 @@ we will focus on text because that's what we want to scrape (we could also scrap
 ]
 
 ???
+- let's look at an example -- hich tags can you see here?
 
 - we are mostly interested in what is inside the **body**, that is, the content of a webpage
 - **head** gives meta information, often used by search engines; we tend to ignore it
@@ -493,19 +618,22 @@ we will focus on text because that's what we want to scrape (we could also scrap
 
 ---
 
-# HTML tags: headings &amp; paragraphs
+&lt;br&gt;
+## HTML tags: headings &amp; paragraphs
+
+&lt;br&gt;&lt;br&gt;
 
 &lt;ol&gt;
 &lt;li&gt;Headings (defined by numbered h tags):&lt;/li&gt;
 
-`&lt;h1&gt;my heading&lt;/h1&gt;` &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;font size=10&gt;my heading&lt;/font&gt;
+`&lt;h1&gt;my heading&lt;/h1&gt;` &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;font size=12&gt;my heading&lt;/font&gt;
 
-`&lt;h2&gt;a smaller heading&lt;/h2&gt;` &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;font size=8&gt;a smaller heading&lt;/font&gt;
+`&lt;h2&gt;a smaller heading&lt;/h2&gt;` &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;font size=6&gt;a smaller heading&lt;/font&gt;
 
 --
 
 &lt;br&gt;&lt;br&gt;
-&lt;li&gt;Paragraphs are defined by div or p tags&lt;/li&gt;
+&lt;li&gt;Paragraphs are defined by "div" or "p" tags&lt;/li&gt;
 
 `&lt;p&gt;this is a paragraph.&lt;/p&gt;&lt;div&gt;and this is the next.&lt;/div&gt;`
 &lt;p&gt;this is a paragraph.&lt;/p&gt;&lt;div&gt;and this is the next.&lt;/div&gt;
@@ -513,24 +641,45 @@ we will focus on text because that's what we want to scrape (we could also scrap
 
 ---
 
-# HTML tags: attributes
+&lt;br&gt;
+## HTML tags: attributes
 
-`&lt;tagname attribute="x"&gt; Title &lt;/tagname&gt;`
+.pull-right75[`&lt;tagname attribute="x"&gt; Some text here &lt;/tagname&gt;`]
 
-&lt;br&gt;&lt;br&gt;
+&lt;br&gt;
 
-### Links and attributes
+--
+&lt;br&gt;
+**Links and attributes**
 
-`This text contains a &lt;a href="http://theguardian.co.uk"&gt;link&lt;/a&gt;.` 
 
-This text contains a &lt;a href="http://theguardian.co.uk"&gt;link&lt;/a&gt;.
+.pull-left45[
+`&lt;a href="http://theguardian.co.uk"&gt; Link&lt;/a&gt; to theguardian.co.uk` 
 
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;a href="http://theguardian.co.uk"&gt;Link&lt;/a&gt; to theguardian.co.uk
+]
+
+.pull-right55[
+
+  
+  `&lt;img src="cat.jpg" href="wikipedia.org/wiki/Cat"`
+  &lt;br&gt; &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;`alt="My cat" width="400"&gt;`
+  
+  
+  
+  .pull-right85[&lt;br&gt;&lt;img src="./img/cat2.jpg" href="wikipedia.org/wiki/Cat" alt="Picture of my cat" width="400" align="left"&gt;]
+  
+
+]
 
 ???
 - All HTML elements can have attributes
 - Attributes provide additional information about an element
     - they are included inside the starting tag
     - they usually come in name and value pairs
+- examples are the source of an image, its width, the target of a hyperlink, etc.
     
 Tags can have attributes -- the most common case of attributes are **links**
 - text or images turned into a link by surrounding `&lt;a&gt;` tag (*anchor*)
@@ -541,46 +690,56 @@ Tags can have attributes -- the most common case of attributes are **links**
       - for users with visual impairments, when image is missing
   - src: source file ` &lt;img src="no_smiley.jpg" alt="Image that does not exist."&gt; `
   - style: text styling (e.g. color ` &lt;p style="color:red"&gt;This is a paragraph.&lt;/p&gt; `)
+
+- how many attributes do we have for each? which ones?
+
 ---
 
-# HTML tags: Classes
+&lt;br&gt;
+## HTML tags: Classes
 
 
-
-.pull-left65[
+&lt;br&gt;
 
 ### General example
+
+.pull-left75[&lt;br&gt;
+
 `&lt;div class="container"&gt;This is the text&lt;/div&gt; `
 
 ]
 
-.pull-right25[
-
-&lt;br&gt;&lt;div class="container"&gt; This is the text&lt;/div&gt;
+.pull-right25[&lt;br&gt;&lt;div class="container"&gt; This is the text&lt;/div&gt;
 
 ]
 
+&lt;br&gt;
 
+???
+
+- **Classes** are another special case of attributes that is used for formatting 
+    - for our purposes, classes styles that are specified before
+    - classes are used within tags
+    
+- what is the name of the class here?
 
 --
 
-
-.pull-left65[
-&lt;br&gt;&lt;br&gt;
 ### Styling with Classes
+
+.pull-left65[&lt;br&gt;
 
 ```
 &lt;style&gt;
     p.error {color: red;   border: 1px solid red;} 
 &lt;/style&gt;
 
-    &lt;p class="error"&gt;Red highlight&lt;/p&gt;
+    &lt;p class="error" align="left"&gt;Red highlight&lt;/p&gt;
 ```
 ]
 
-.pull-right25[
-
-&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+.pull-right35[ 
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
 
 &lt;style&gt;
 p.error {
@@ -592,10 +751,6 @@ p.error {
 ]
 
 ???
-
-- **Classes** are another special case of attributes that is used for formatting 
-    - specified before
-    - usage within tags
     
 - don't worry if you don't understand everything
   - you should understand the logic: 
@@ -603,9 +758,327 @@ p.error {
   - the stuff also includes **attributes** that modify how it looks
 
 ---
+
+&lt;br&gt;
+## HTML tags: Practicalities
+
+
+???
+
+- In daily life, I use the CSS selectorgadget
+
+--
+
+.pull-right95[
+
+&lt;img src = "./img/css-selector.jpg" width = 900 style="horizontal-align: middle"/&gt;
+
+To easily access selectors, use Chrome [selector gadget](https://chrome.google.com/webstore/detail/selectorgadget/mhjhnkcfbdhnjickkkdbjoemdmbfginb).]
+
+???
+- it's available in google chrome and allows you to click on an element; 
+- all elements of the same attributes are then highlighted and can be deselected
+- this way, you can use point &amp; click to select only the elements you want
+
+---
+
+&lt;br&gt;
+## Practicing with the [CSS Diner](https://flukeout.github.io)
 &lt;br&gt;
 
-Example page we will use: [quotes.toscrape.com](http://quotes.toscrape.com).
+.pull-right85[&lt;img src="./img/css-diner.jpg" width=800/&gt;
+
+]
+
+???
+- the **CSS Diner** allows practising, 
+- [@Ivo] go to the page
+- the first (of 32) level is solved like this; hovering over the elements let's you know how each is called; the moving ones should be selected
+- the right column explains details to you
+- Now @everyone, go to the page flukeout.github.io and practise for 5min
+
+---
+
+class: inverse, center, middle
+## Let's start scraping in R
+
+???
+
+- I know this has been quite a bit of background; 
+- but I hope that now you have a bit of an idea what and how we could collect data from the web
+- so: let's start scraping 
+- the good think in `R` is: no matter what you're trying to do - there's always a package for it
+- so let's get started using a simple example and the package `rvest`
+(- now use the rmarkdown file)
+
+---
+
+&lt;br&gt; 
+## `rvest`
+
+&lt;br&gt;&lt;br&gt;
+
+.pull-left35[
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;img src="./img/rvest.png" width=300 style="vertical-align: middle"/&gt;
+]
+
+???
+
+- `rvest` is an `R` package for scraping, 
+- it's a wrapper around some other packages that is part of and integrates well with the tidyverse universe
+- it is like the Swiss army knife of scraping: very versatile, widely applicable and rather intuitive to use
+
+- it's strengths and weaknesses are also similar to that of the Swiss army knife:
+    - [+] covers most frequent use cases and
+    - [+] integrates with other packages, e.g. tidyverse very well; **but**
+    - [-] it is also relatively simple: no dynamic webpages
+
+- its main uses are 
+  - getting tables, 
+  - getting text, and
+  - extracting links from home pages - and that's what we'll focus on today
+  &lt;!--- (and downloading files) ---&gt;
+
+--
+
+
+.pull-right55[&lt;br&gt;&lt;br&gt;
+
+### Main commands:
+- `read_html()`
+- `html_nodes()` / `html_node()`
+- `html_text()`
+- `html_table()`
+- `html_attrs()` / `html_attr()`
+]
+???
+The main functions of rvest are:
+- `read_html()` - reads in an HTML page
+- `html_nodes()` / `html_node()` - select nodes from an HTML document (i.e. extract pieces using selectors)
+- `html_text()` - extracts the attributes, text, and the tag name from an html
+- `html_table()` - parses an html table into a data frame
+- `html_attrs()` / `html_attr()` - extracts attributes, text, and tag name from an html, e.g. the link text
+
+---
+
+&lt;br&gt;
+## Scraping manually
+
+&lt;br&gt;&lt;br&gt;
+
+.pull-left25[
+
+- Specify resource
+
+&lt;br&gt;
+
+- Read ("parse") resource
+
+&lt;br&gt;
+
+- select elements
+]
+
+.pull-right75[
+
+```r
+url_quotes &lt;- "http://quotes.toscrape.com" 
+# call browseURL(url_quotes) to inspect page
+```
+
+
+
+```r
+library(rvest)
+page_quotes &lt;- url_quotes %&gt;% read_html()
+```
+
+&lt;br&gt;
+
+
+```r
+page_quotes %&gt;% html_text() # removes tags &amp; formatting
+
+page_quotes %&gt;% html_nodes("a") # extract links 
+    # &lt;a href="..."&gt;LINK TEXT 1&lt;/a&gt;
+    # &lt;a href="..."&gt;LINK TEXT 2&lt;/a&gt;
+```
+]
+
+???
+scraping with R works in a specific way:
+1. you manually specify a resource
+2. then you instruct R to send a request to server that hosts website, and the server returns the requested resource
+4. R parses the returned HTML (i.e., interprets the structure); BUT: R does not render the HTML in a nice fashion
+5. you tell R which parts of the structure to focus on and what to extract
+
+- how would we get only the TEXT of the links, not the links themselves (i.e. the &lt;a href="..."&gt;LINK TEXT&lt;/a&gt;)
+
+---
+
+class: inverse, center, middle 
+## Let's practise
+&lt;br&gt; &amp;rarr; Exercises in `worksheet.Rmd`
+
+???
+- ok, this is the end of the input
+- We now practice with the worksheet. If you haven't done so, you can download it from the GitHub page
+- I will put you into breakout rooms of 4-5 people; if you're stuck, ask around - and if you cannot figure it out together, and have searched for a solution online, use the "ask for help" function.
+- If I'm not coming immediately, I'm with another group. then please be patient and try again some minutes later
+
+- [if applicable] if we have more time, I will provide some extra information (about links and automation)
+
+- please be back in the main room around 5:40, so we can quickly discuss remaining questions and then say goodbye; if you then want to stick around for virtual drinks, I have prepared a room.
+---
+
+class:inverse, middle, center
+## Thank you
+
+Click [here](https://www.wonder.me/r?id=195ebb26-39f5-410a-a67a-82c0e67ff532) to enter the wonder-room (password: "Alohomora!")
+
+???
+If we have more time, I will provide some more infos (and I have two extras)
+
+But if this is not the case, this is the end.
+
+
+---
+
+&lt;br&gt;
+## The process of scraping
+
+&lt;img src="./diagrams/Folie11.png"&gt;
+
+
+---
+
+&lt;br&gt;
+## The process of scraping
+
+&lt;img src="./diagrams/Folie12.png"&gt;
+
+
+---
+
+&lt;br&gt;
+## The process of scraping
+
+&lt;img src="./diagrams/Folie13.png"&gt;
+
+---
+
+class: inverse, center, middle
+## Extra (1): extracting links from webpages
+
+---
+
+&lt;br&gt;
+## Links
+
+.pull-left45[&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;img src="./img/links.jpg" height="480"&gt;]
+
+???
+
+- unlike a book that we read cover to cover,  webpages distribute information over multiple pages
+- *hyperlinks* connect one page to the others &amp;rarr; we follow them by clicking
+    - we need to deal with this differently when scraping
+    
+- We discussed links as a common case of attributes
+    - content turned into a link with `&lt;a&gt;` tag (*anchor*)
+    - link address specified as href attribute (*hyperreference*)
+  
+--
+
+.pull-right45[
+### Extracting links with rvest
+&lt;br&gt;&lt;br&gt;
+- link text:
+    &lt;br&gt;&amp;nbsp; `html_nodes(page, "a") %&gt;%` &lt;br&gt; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; `html_text()` &lt;br&gt;&lt;br&gt;
+    
+- hyperreference:
+  &lt;br&gt;&amp;nbsp; `html_nodes(page, "a") %&gt;%` &lt;br&gt; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; `html_attr("href")`
+
+]
+
+???
+
+*Caution*: Link is attribute of `&lt;a&gt;`-Tag! So we will have to select the _link nodes_ (a) and then get the href _attributes_
+
+`html_attr(page,"href")` vs. `html_nodes(page,"a") %&gt;% html_attr("href")`
+
+---
+
+class: inverse, center, middle
+## Extra (2): scaling up
+
+???
+
+Just to give an outlook, we'll quickly discuss ways to scale up scraping
+
+---
+
+&lt;br&gt;
+## Scaling up
+
+???
+- to scale up, we have two main ways of repeating code across different units
+
+--
+
+.pull-right75[
+
+&lt;img src="./img/for-1.jpg" height="150"&gt;
+
+&lt;br&gt;
+
+
+&lt;img src="./img/sapply1.jpg" height="200"&gt;
+
+]
+
+???
+- Our two options are (1) for-loops and (2) variants of the apply function
+- we'll focus here on loops, 
+
+Advantages
+- their main advantage is that they're easy to write
+- do not require full translation of code into functions
+- easy to interrupt and continue for prolonged scraping
+
+Disadvantages
+- become inefficient for high numbers of iterations
+- no swag: [stackoverflow: Are For loops evil in R?](https://stackoverflow.com/questions/30240573/are-for-loops-evil-in-r)
+
+Good to know
+- loops with `for` are just the most well-known type of loop
+    - `while` loops
+    - `repeat` loops
+    - `break` and `next` clauses
+
+---
+
+&lt;br&gt;
+## `for`- loops: application
+
+.pull-left45[
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+### Example
+
+
+```r
+for (i in 1:length(urls)){
+  text[i] &lt;- read_html(urls[i]) %&gt;% 
+    html_nodes(".text") %&gt;% 
+    html_text()
+}
+```
+
+]
+
+???
+- We see here how we could employ a loop to extract a lot of text from some subpages in just a few lines of code
+- imagine that `urls` is a vector of URLs that you scraped using the method to extract links that I showed before
+- now you can easily just go through all subpages (to which you have the reference) and get any element from them that you want
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

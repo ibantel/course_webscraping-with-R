@@ -108,7 +108,7 @@ div.center_text_2 span{
 
 /* Body */
 
-body { font-family: 'Droid Serif', 'Palatino Linotype', 'Book Antiqua', Palatino, 'Microsoft YaHei', 'Songti SC', serif; }
+body { font-family: 'Droid Serif', 'Palatino Linotype', 'Book Antiqua', Palatino, 'Microsoft YaHei', 'Songti SC', serif; font-size: 25px;}
 h1, h2, h3 {
   font-family: 'Yanone Kaffeesatz';
   font-weight: normal;
