@@ -116,7 +116,7 @@ library(tidyverse)
 ---
 
 <br>
-## Schedule 
+## Agenda 
 
 .pull-left[<br<br><br><img src="./img/agenda.jpg" height="300"> <br><br><br><br>]
 
@@ -198,30 +198,36 @@ But for now, I have some questions. Please use *Yes*, *No* etc. in Zoom.
 
 --
 
-<br>
+<br><br>
 
-- How much experience do you have with R? <br> 
-  &nbsp; <img src="./img/open-mouth.png" alt="open mouth" height="20"/> &nbsp; None &nbsp;  &nbsp;  &nbsp;
-  &nbsp; <img src="./img/no.png" alt="no" height="20"/> &nbsp; Some  &nbsp;  &nbsp;  &nbsp;
-  &nbsp; <img src="./img/yes.png" alt="yes" height="20"/> &nbsp; I can write functions &nbsp;  &nbsp;  &nbsp;
-  &nbsp; <img src="./img/heart.png" alt="heart" height="20"/> &nbsp; I'm a pro
+<b><font size=6>How much experience do you have with R?</font></b><br><br>
 
-
---
-
-<br>
-
-- Have you used `RMarkdown` notebooks before? <br> 
-  &nbsp; <img src="./img/open-mouth.png" alt="open mouth" height="20"/> &nbsp; Don't know what that is &nbsp;  &nbsp;  &nbsp;
-  &nbsp; <img src="./img/no.png" alt="no" height="20"/> &nbsp; I've opened one  &nbsp;  &nbsp;  &nbsp;
-  &nbsp; <img src="./img/yes.png" alt="yes" height="20"/> &nbsp; I've written some &nbsp;  &nbsp;  &nbsp;
-  &nbsp; <img src="./img/heart.png" alt="heart" height="20"/> &nbsp; All the time
+&nbsp; <img src="./img/open-mouth.png" alt="open mouth" height="20"/> &nbsp; None                  &nbsp;  &nbsp;  &nbsp;
+&nbsp; <img src="./img/no.png" alt="no" height="20"/>                 &nbsp; Some                  &nbsp;  &nbsp;  &nbsp;
+&nbsp; <img src="./img/yes.png" alt="yes" height="20"/>               &nbsp; I can write functions &nbsp;  &nbsp;  &nbsp;
+&nbsp; <img src="./img/heart.png" alt="heart" height="20"/>           &nbsp; I'm a pro
 
 --
 
+<br><br>
+
+<b><font size=6>Have you used _RMarkdown_ notebooks before?</font></b><br><br>
+
+&nbsp; <img src="./img/open-mouth.png" alt="open mouth" height="20"/> &nbsp; Don't know what that is &nbsp;  &nbsp;  &nbsp;
+&nbsp; <img src="./img/no.png" alt="no" height="20"/>                 &nbsp; Once  &nbsp;            &nbsp;  &nbsp;
+&nbsp; <img src="./img/yes.png" alt="yes" height="20"/>               &nbsp; I've written some       &nbsp;  &nbsp;  &nbsp;
+&nbsp; <img src="./img/heart.png" alt="heart" height="20"/>           &nbsp; All the time
+
+<!--- - Is there a specific webpage you want to scrape? (Use chat) --->
+
+---
+
+<br>
+## Getting to know you
+
 <br>
 
-- Have you ever webscraped? <br>
+<b><font size=5>Have you ever webscraped?</font></b><br><br>
   &nbsp; <img src="./img/open-mouth.png" alt="open mouth" height="20"/> &nbsp; What _is_ that? &nbsp; &nbsp;
   &nbsp; <img src="./img/no.png" alt="no" height="20"/>                 &nbsp; Never           &nbsp; &nbsp;
   &nbsp; <img src="./img/yes.png" alt="yes" height="20"/>               &nbsp; Once            &nbsp; &nbsp;
@@ -232,16 +238,27 @@ But for now, I have some questions. Please use *Yes*, *No* etc. in Zoom.
 
 <br>
 
-- How comfortable are you with HTML? <br>
+<b><font size=5>How comfortable are you with HTML?</font><br><br>
   &nbsp; <img src="./img/open-mouth.png" alt="open mouth" height="20"/> &nbsp; HTwhat? &nbsp; &nbsp; &nbsp;
   &nbsp; <img src="./img/no.png" alt="no" height="20"/>                 &nbsp; Heard of it    &nbsp; &nbsp;
   &nbsp; <img src="./img/yes.png" alt="yes" height="20"/>               &nbsp; I know basics  &nbsp; &nbsp;
   &nbsp; <img src="./img/heart.png" alt="heart" height="20"/>           &nbsp; I'm fluent
 
-
+--
+ 
 
 <br>
- 
+
+<b><font size=5>Which aspect of the workshop are you more interested in?</font><br><br>
+  &nbsp; <img src="./img/open-mouth.png" alt="open mouth" height="20"/> &nbsp; Get as much input as possible &nbsp; &nbsp; &nbsp;
+  &nbsp; <img src="./img/heart.png" alt="heart" height="20"/>           &nbsp; Minimum input, I want to practise
+
+
+???
+
+- Now, the last question will allow me to emphasize a bit more what we'll do today.
+- we will still cover both aspects but then I'll try to focus a bit more on one of them.
+- don't worry either way; the slides are online, and there are also enough exercises to keep you busy for a bit after the workshop is done
 
 <!--- - Is there a specific webpage you want to scrape? (Use chat) --->
 
@@ -469,7 +486,7 @@ Procedure
   <br>
     <img src="./img/crawler.png" width=400 style="vertical-align: middle"/>
   <br>
-  <font size=0.1>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Created by Symbolon from the Noun Project</font>
+  <font size=0.01>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Created by Symbolon from the Noun Project</font>
 
 ]
 
@@ -553,7 +570,11 @@ HTML turns this code ...
 
 --
 
-.pull-right45[<br><br><br><br><br><img src="./img/boldtext.jpg" width="400">]
+.pull-right45[<br><br><img src="./img/boldtext.jpg" width="400">
+.pull-right75[
+<p>This text is <b>bold</b></p>]
+
+]
 
 
 ???
@@ -594,11 +615,11 @@ HTML turns this code ...
 <br>
 
 .pull-right45[<br>
-Example: <br><br>
+&nbsp; &nbsp; &nbsp; &nbsp;Example: <br>
 
-&nbsp; &nbsp; &nbsp; &nbsp; `<tagname>` <br>
-&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;  &nbsp;  &nbsp; `Some content here...` <br>
-&nbsp; &nbsp; &nbsp; &nbsp; `</tagname> `]
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; `<tagname>` <br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;  &nbsp;  &nbsp; `Some content here...` <br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; `</tagname> `]
 
 ???
 
@@ -660,13 +681,14 @@ Example: <br><br>
 <br>
 ## HTML tags: attributes
 
-.pull-right75[`<tagname attribute="x"> Some text here </tagname>`]
+.pull-right75[
+`<tagname attribute="x"> Some text here </tagname>`]
 
 <br>
 
 --
-<br>
-**Links and attributes**
+<br><br><br>
+<!---**Links and attributes**--->
 
 
 .pull-left45[
@@ -677,6 +699,8 @@ Example: <br><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://theguardian.co.uk">Link</a> to theguardian.co.uk
 ]
 
+--
+
 .pull-right55[
 
   
@@ -685,7 +709,7 @@ Example: <br><br>
   
   
   
-  .pull-right85[<br><img src="./img/cat2.jpg" href="wikipedia.org/wiki/Cat" alt="Picture of my cat" width="400" align="left">]
+  .pull-right85[<br><img src="./img/cat.jpg" href="wikipedia.org/wiki/Cat" alt="Picture of my cat" width="400" align="left">]
   
 
 ]
@@ -741,9 +765,11 @@ Tags can have attributes -- the most common case of attributes are **links**
 
 --
 
-### Styling with Classes
+
 
 .pull-left65[<br>
+
+### Styling with Classes
 
 ```
 <style>
